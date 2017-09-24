@@ -160,7 +160,9 @@ public class AppWindow extends javax.swing.JFrame {
     FONCTION : permet d'ouvrir une image provenant de son disque dur
     */
     private void ouvrirImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ouvrirImageActionPerformed
-
+        // VERIFIER QU'IL N'Y A PAS D'IMAGE AVANT !!!
+        
+        
         fichierSource = ouvrirImage();
         if(fichierSource != null)
         {
