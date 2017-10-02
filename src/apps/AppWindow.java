@@ -53,6 +53,10 @@ public class AppWindow extends javax.swing.JFrame {
         imageDepPanel = new javax.swing.JPanel();
         imageResSP = new javax.swing.JScrollPane();
         imageResPanel = new javax.swing.JPanel();
+        barreOutils = new javax.swing.JToolBar();
+        BouttonPalette = new javax.swing.JRadioButton();
+        BouttonROI = new javax.swing.JRadioButton();
+        BouttonAgrandir = new javax.swing.JRadioButton();
         menuPrincipal = new javax.swing.JMenuBar();
         fichierMenu = new javax.swing.JMenu();
         ouvrirImage = new javax.swing.JMenuItem();
@@ -74,6 +78,23 @@ public class AppWindow extends javax.swing.JFrame {
 
         imageResPanel.setLayout(new java.awt.BorderLayout());
         imageResSP.setViewportView(imageResPanel);
+
+        barreOutils.setRollover(true);
+
+        BouttonPalette.setText("Palette");
+        BouttonPalette.setFocusable(false);
+        BouttonPalette.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        barreOutils.add(BouttonPalette);
+
+        BouttonROI.setText("R.O.I.");
+        BouttonROI.setFocusable(false);
+        BouttonROI.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        barreOutils.add(BouttonROI);
+
+        BouttonAgrandir.setText("Agrandir");
+        BouttonAgrandir.setFocusable(false);
+        BouttonAgrandir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        barreOutils.add(BouttonAgrandir);
 
         fichierMenu.setText("Fichier");
 
@@ -118,16 +139,21 @@ public class AppWindow extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addComponent(imageDepSP, javax.swing.GroupLayout.PREFERRED_SIZE, 960, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(imageResSP, javax.swing.GroupLayout.DEFAULT_SIZE, 960, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(barreOutils, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(imageDepSP, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
-            .addComponent(imageResSP)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(barreOutils, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(imageDepSP, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
+                    .addComponent(imageResSP)))
         );
 
         pack();
@@ -297,7 +323,11 @@ public class AppWindow extends javax.swing.JFrame {
         this.validate();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton BouttonAgrandir;
+    private javax.swing.JRadioButton BouttonPalette;
+    private javax.swing.JRadioButton BouttonROI;
     private javax.swing.JMenu aproposMenu;
+    private javax.swing.JToolBar barreOutils;
     private javax.swing.JMenu editionMenu;
     private javax.swing.JMenuItem fermerImage;
     private javax.swing.JMenu fichierMenu;
