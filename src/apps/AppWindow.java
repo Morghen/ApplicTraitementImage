@@ -7,20 +7,14 @@ package apps;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseListener;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -34,6 +28,12 @@ public class AppWindow extends javax.swing.JFrame {
     public BufferedImage imageRes;
     public File fichierSource;
     public String lastDirectoryUsed;
+    public int etatVar;
+    public int X1;
+    public int Y1;
+    public int X2;
+    public int Y2;
+    public Color ColorBefore;
     
     public AppWindow() {
         initComponents();
@@ -43,6 +43,11 @@ public class AppWindow extends javax.swing.JFrame {
         lastDirectoryUsed=null;
         fermerImage.setEnabled(false);
         sauverImage.setEnabled(false);
+        etatVar=1;
+        X1=0;
+        X2=0;
+        Y1=0;
+        Y2=0;
         this.setLocationRelativeTo(null);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
@@ -77,6 +82,7 @@ public class AppWindow extends javax.swing.JFrame {
         imageCouleurG = new javax.swing.JTextField();
         LabelB = new javax.swing.JLabel();
         imageCouleurB = new javax.swing.JTextField();
+        BouttonValider = new javax.swing.JButton();
         menuPrincipal = new javax.swing.JMenuBar();
         fichierMenu = new javax.swing.JMenu();
         ouvrirImage = new javax.swing.JMenuItem();
@@ -136,7 +142,7 @@ public class AppWindow extends javax.swing.JFrame {
         barreOutils.add(BouttonROI);
 
         GroupageBouttonOutils.add(BouttonAgrandir);
-        BouttonAgrandir.setText("Agrandir");
+        BouttonAgrandir.setText("Taille");
         BouttonAgrandir.setFocusable(false);
         BouttonAgrandir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         barreOutils.add(BouttonAgrandir);
@@ -180,8 +186,21 @@ public class AppWindow extends javax.swing.JFrame {
         barreOutils.add(LabelB);
 
         imageCouleurB.setEditable(false);
+        imageCouleurB.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 20));
         imageCouleurB.setPreferredSize(new java.awt.Dimension(50, 28));
         barreOutils.add(imageCouleurB);
+
+        BouttonValider.setText("Valider");
+        BouttonValider.setEnabled(false);
+        BouttonValider.setFocusable(false);
+        BouttonValider.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BouttonValider.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BouttonValider.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BouttonValiderActionPerformed(evt);
+            }
+        });
+        barreOutils.add(BouttonValider);
 
         fichierMenu.setText("Fichier");
 
@@ -329,19 +348,82 @@ public class AppWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_fermerImageActionPerformed
 
     private void imageLabelGMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imageLabelGMouseClicked
-        if(BouttonPalette.isSelected() && imageDep != null)
+        try
         {
-            Color tmp = new Color(imageDep.getRGB((int)evt.getX(),(int)evt.getY()));
-            imageCouleurR.setText(Integer.toString(tmp.getRed()));
-            imageCouleurG.setText(Integer.toString(tmp.getGreen()));
-            imageCouleurB.setText(Integer.toString(tmp.getBlue()));
-            
+            if(BouttonPalette.isSelected() && imageDep != null)
+            {   
+                ColorBefore = null;
+                ColorBefore = new Color(imageDep.getRGB((int)evt.getX(),(int)evt.getY()));
+                imageCouleurR.setText(Integer.toString(ColorBefore.getRed()));
+                imageCouleurG.setText(Integer.toString(ColorBefore.getGreen()));
+                imageCouleurB.setText(Integer.toString(ColorBefore.getBlue()));
+                if(!BouttonValider.isEnabled())
+                {
+                    BouttonValider.setEnabled(true);
+                    imageCouleurR.setEditable(true);
+                    imageCouleurG.setEditable(true);
+                    imageCouleurB.setEditable(true);
+                }
+            }
+            if(BouttonROI.isSelected() && imageDep != null)
+            {              
+                if(etatVar==1)
+                {
+                    X1 = evt.getX();
+                    Y1 = evt.getY();
+                    etatVar=2;
+                }
+                else
+                {
+                    X2 = evt.getX();
+                    Y2 = evt.getY();
+                    ROI(X1,Y1,X2,Y2);
+                    etatVar=1;
+                }
+            }
+            if(BouttonAgrandir.isSelected() && imageDep != null)
+            {
+                imageHauteur.setEditable(true);
+                imageLargeur.setEditable(true);
+                BouttonValider.setEnabled(true);
+                this.validate();
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        
+    }//GEN-LAST:event_imageLabelGMouseClicked
+
+    private void BouttonValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BouttonValiderActionPerformed
+        if(BouttonPalette.isSelected())
+        {
+            Color modification = new Color(Integer.parseInt(imageCouleurR.getText()),Integer.parseInt(imageCouleurG.getText()),Integer.parseInt(imageCouleurB.getText()));
+            for(int i=0; i<imageRes.getWidth();i++)
+            {
+                for(int j=0; j<imageRes.getHeight(); j++)
+                {
+                    Color tmp = new Color(imageDep.getRGB(i, j));
+                    if(tmp.equals(ColorBefore))
+                    {
+                        imageRes.setRGB(i, j, modification.getRGB());
+                    }
+                }
+            }
+            BouttonValider.setEnabled(false);
+            imageCouleurR.setEditable(false);
+            imageCouleurG.setEditable(false);
+            imageCouleurB.setEditable(false);
+            imageLabelD.setIcon(null);
+            imageLabelD.setIcon(new ImageIcon(imageRes));
+            this.validate();
         }
         else
         {
-            
-        }   
-    }//GEN-LAST:event_imageLabelGMouseClicked
+            creaImage(Integer.parseInt(imageLargeur.getText()),Integer.parseInt(imageHauteur.getText()));
+        }
+    }//GEN-LAST:event_BouttonValiderActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -419,9 +501,9 @@ public class AppWindow extends javax.swing.JFrame {
                 ImageIcon imgD = new ImageIcon(imageRes);
                 imageLabelG.setIcon(imgG);
                 imageLabelD.setIcon(imgD);
-                imageDepPanel.add(imageLabelG,BorderLayout.CENTER);
-                imageResPanel.add(imageLabelD,BorderLayout.CENTER);               
-                this.validate();                            
+                imageDepPanel.add(imageLabelG);
+                imageResPanel.add(imageLabelD);               
+                this.validate();
         }
         catch(IOException e)
         {
@@ -448,10 +530,35 @@ public class AppWindow extends javax.swing.JFrame {
         imageCouleurG.setText("");
         imageCouleurB.setText("");
     }
+    
+    private void ROI(int X1, int Y1, int X2, int Y2) {
+        
+        for(int i =0; i < Math.abs(X2-X1); i++)
+        {
+            for(int j =0; j < Math.abs(Y2-Y1); j++)
+            {
+                imageRes.setRGB(i, j, imageDep.getRGB(X1+i, Y1+j));
+            }
+        }
+        creaImage(Math.abs(X2-X1),Math.abs(Y2-Y1));
+    }
+    
+    private void creaImage(int x,int y) {
+        BufferedImage tmp = new BufferedImage(x, y, imageDep.getType());
+        Graphics g = tmp.getGraphics();
+        g.fillRect(0, 0, x, y);
+        g.drawImage(imageDep, 0, 0, null);
+        g.dispose();
+        imageLabelD.setIcon(null);
+        imageRes = null;
+        imageRes = tmp;
+        imageLabelD.setIcon(new ImageIcon(imageRes));
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton BouttonAgrandir;
     private javax.swing.JRadioButton BouttonPalette;
     private javax.swing.JRadioButton BouttonROI;
+    private javax.swing.JButton BouttonValider;
     private javax.swing.ButtonGroup GroupageBouttonOutils;
     private javax.swing.JLabel LabelB;
     private javax.swing.JLabel LabelG;
@@ -479,4 +586,6 @@ public class AppWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem quitterApp;
     private javax.swing.JMenuItem sauverImage;
     // End of variables declaration//GEN-END:variables
+
+    
 }
