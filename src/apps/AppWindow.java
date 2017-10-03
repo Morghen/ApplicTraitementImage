@@ -6,8 +6,13 @@
 package apps;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -25,15 +30,17 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class AppWindow extends javax.swing.JFrame {
 
-    public Image imageDep;
-    public Image imageRes;
+    public BufferedImage imageDep;
+    public BufferedImage imageRes;
     public File fichierSource;
+    public String lastDirectoryUsed;
     
     public AppWindow() {
         initComponents();
         imageDep = null;
         imageRes = null;
         fichierSource = null;
+        lastDirectoryUsed=null;
         fermerImage.setEnabled(false);
         sauverImage.setEnabled(false);
         this.setLocationRelativeTo(null);
@@ -49,14 +56,27 @@ public class AppWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        GroupageBouttonOutils = new javax.swing.ButtonGroup();
         imageDepSP = new javax.swing.JScrollPane();
         imageDepPanel = new javax.swing.JPanel();
+        imageLabelG = new javax.swing.JLabel();
         imageResSP = new javax.swing.JScrollPane();
         imageResPanel = new javax.swing.JPanel();
+        imageLabelD = new javax.swing.JLabel();
         barreOutils = new javax.swing.JToolBar();
         BouttonPalette = new javax.swing.JRadioButton();
         BouttonROI = new javax.swing.JRadioButton();
         BouttonAgrandir = new javax.swing.JRadioButton();
+        LabelHauteur = new javax.swing.JLabel();
+        imageHauteur = new javax.swing.JTextField();
+        LabelLargeur = new javax.swing.JLabel();
+        imageLargeur = new javax.swing.JTextField();
+        LabelR = new javax.swing.JLabel();
+        imageCouleurR = new javax.swing.JTextField();
+        LabelG = new javax.swing.JLabel();
+        imageCouleurG = new javax.swing.JTextField();
+        LabelB = new javax.swing.JLabel();
+        imageCouleurB = new javax.swing.JTextField();
         menuPrincipal = new javax.swing.JMenuBar();
         fichierMenu = new javax.swing.JMenu();
         ouvrirImage = new javax.swing.JMenuItem();
@@ -70,31 +90,98 @@ public class AppWindow extends javax.swing.JFrame {
         setTitle("Application traitement d'image - HEPL");
         setLocation(new java.awt.Point(0, 0));
         setName("mainWindow"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(1024, 720));
         setSize(new java.awt.Dimension(1024, 720));
 
+        imageDepSP.setViewportBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
         imageDepPanel.setLayout(new java.awt.BorderLayout());
+
+        imageLabelG.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        imageLabelG.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        imageLabelG.setPreferredSize(null);
+        imageLabelG.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                imageLabelGMouseClicked(evt);
+            }
+        });
+        imageDepPanel.add(imageLabelG, java.awt.BorderLayout.PAGE_START);
+
         imageDepSP.setViewportView(imageDepPanel);
 
+        imageResSP.setViewportBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
         imageResPanel.setLayout(new java.awt.BorderLayout());
+
+        imageLabelD.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        imageLabelD.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        imageLabelD.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        imageLabelD.setPreferredSize(null);
+        imageResPanel.add(imageLabelD, java.awt.BorderLayout.PAGE_START);
+
         imageResSP.setViewportView(imageResPanel);
 
         barreOutils.setRollover(true);
 
+        GroupageBouttonOutils.add(BouttonPalette);
+        BouttonPalette.setSelected(true);
         BouttonPalette.setText("Palette");
         BouttonPalette.setFocusable(false);
         BouttonPalette.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         barreOutils.add(BouttonPalette);
 
+        GroupageBouttonOutils.add(BouttonROI);
         BouttonROI.setText("R.O.I.");
         BouttonROI.setFocusable(false);
         BouttonROI.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         barreOutils.add(BouttonROI);
 
+        GroupageBouttonOutils.add(BouttonAgrandir);
         BouttonAgrandir.setText("Agrandir");
         BouttonAgrandir.setFocusable(false);
         BouttonAgrandir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         barreOutils.add(BouttonAgrandir);
+
+        LabelHauteur.setText("Hauteur");
+        LabelHauteur.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 40, 0, 10));
+        barreOutils.add(LabelHauteur);
+
+        imageHauteur.setEditable(false);
+        imageHauteur.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        imageHauteur.setMinimumSize(new java.awt.Dimension(50, 28));
+        imageHauteur.setPreferredSize(new java.awt.Dimension(50, 28));
+        barreOutils.add(imageHauteur);
+
+        LabelLargeur.setText("Largeur");
+        LabelLargeur.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 40, 0, 10));
+        barreOutils.add(LabelLargeur);
+
+        imageLargeur.setEditable(false);
+        imageLargeur.setPreferredSize(new java.awt.Dimension(50, 28));
+        barreOutils.add(imageLargeur);
+
+        LabelR.setText("R");
+        LabelR.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 40, 0, 10));
+        barreOutils.add(LabelR);
+
+        imageCouleurR.setEditable(false);
+        imageCouleurR.setPreferredSize(new java.awt.Dimension(50, 28));
+        barreOutils.add(imageCouleurR);
+
+        LabelG.setText("G");
+        LabelG.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 40, 0, 10));
+        barreOutils.add(LabelG);
+
+        imageCouleurG.setEditable(false);
+        imageCouleurG.setPreferredSize(new java.awt.Dimension(50, 28));
+        barreOutils.add(imageCouleurG);
+
+        LabelB.setText("B");
+        LabelB.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 40, 0, 10));
+        barreOutils.add(LabelB);
+
+        imageCouleurB.setEditable(false);
+        imageCouleurB.setPreferredSize(new java.awt.Dimension(50, 28));
+        barreOutils.add(imageCouleurB);
 
         fichierMenu.setText("Fichier");
 
@@ -140,9 +227,10 @@ public class AppWindow extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(imageDepSP, javax.swing.GroupLayout.PREFERRED_SIZE, 960, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(imageDepSP, javax.swing.GroupLayout.PREFERRED_SIZE, 954, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(imageResSP, javax.swing.GroupLayout.DEFAULT_SIZE, 960, Short.MAX_VALUE)
+                .addComponent(imageResSP)
                 .addContainerGap())
             .addComponent(barreOutils, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -152,8 +240,8 @@ public class AppWindow extends javax.swing.JFrame {
                 .addComponent(barreOutils, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(imageDepSP, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
-                    .addComponent(imageResSP)))
+                    .addComponent(imageResSP, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+                    .addComponent(imageDepSP, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
         );
 
         pack();
@@ -186,15 +274,31 @@ public class AppWindow extends javax.swing.JFrame {
     FONCTION : permet d'ouvrir une image provenant de son disque dur
     */
     private void ouvrirImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ouvrirImageActionPerformed
-        // VERIFIER QU'IL N'Y A PAS D'IMAGE AVANT !!!
-        
-        
+        if(imageDep != null)
+        {
+            int choixDialog = JOptionPane.showConfirmDialog(null,"Votre travail peut être perdu, voulez-vous sauvegarder le résultat ?","Avertissement",JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            if(choixDialog == JOptionPane.YES_OPTION)   // Si OUI
+            {
+                // Sauvegarder l'image résultat
+                cleanVariables();
+                fermerImage.setEnabled(false);
+                sauverImage.setEnabled(false);
+            }
+            if(choixDialog == JOptionPane.NO_OPTION)    // Si NON
+            {
+                cleanVariables();
+                fermerImage.setEnabled(false);
+                sauverImage.setEnabled(false);
+            }         
+        }       
         fichierSource = ouvrirImage();
         if(fichierSource != null)
         {
             afficherImageInit();
             fermerImage.setEnabled(true);
             sauverImage.setEnabled(true);
+            imageHauteur.setText(Integer.toString(imageDep.getHeight(null)));
+            imageLargeur.setText(Integer.toString(imageDep.getWidth(null)));
         }          
         else
             JOptionPane.showMessageDialog(null, "Aucune image chargée", "Avertissement", JOptionPane.WARNING_MESSAGE);
@@ -224,9 +328,21 @@ public class AppWindow extends javax.swing.JFrame {
        
     }//GEN-LAST:event_fermerImageActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void imageLabelGMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imageLabelGMouseClicked
+        if(BouttonPalette.isSelected() && imageDep != null)
+        {
+            Color tmp = new Color(imageDep.getRGB((int)evt.getX(),(int)evt.getY()));
+            imageCouleurR.setText(Integer.toString(tmp.getRed()));
+            imageCouleurG.setText(Integer.toString(tmp.getGreen()));
+            imageCouleurB.setText(Integer.toString(tmp.getBlue()));
+            
+        }
+        else
+        {
+            
+        }   
+    }//GEN-LAST:event_imageLabelGMouseClicked
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -268,13 +384,17 @@ public class AppWindow extends javax.swing.JFrame {
         JFileChooser openPic = new JFileChooser();  // Selection de fichier
         openPic.setAcceptAllFileFilterUsed(false);  // Cacher "Tous les fichier"
         openPic.setFileFilter(new FileNameExtensionFilter("Images (gif,jpg,png)","gif","jpg","png"));   // Filtrer uniquement sur certaines extension
-        openPic.setCurrentDirectory(new File(System.getProperty("user.home"))); // Dossier de départ : home
+        if(lastDirectoryUsed != null)
+            openPic.setCurrentDirectory(new File(lastDirectoryUsed));
+        else
+            openPic.setCurrentDirectory(new File(System.getProperty("user.home"))); // Dossier de départ : home
         int resultat = openPic.showOpenDialog(null);    // Dialogue Ouvrir...
         if(resultat == JFileChooser.APPROVE_OPTION)
         {
             try
             {
                 File fich = openPic.getSelectedFile();
+                lastDirectoryUsed=fich.getParent();
                 return fich;
             }  
             catch(Exception e)
@@ -297,8 +417,8 @@ public class AppWindow extends javax.swing.JFrame {
                 imageRes = ImageIO.read(fichierSource);
                 ImageIcon imgG = new ImageIcon(imageDep);
                 ImageIcon imgD = new ImageIcon(imageRes);
-                JLabel imageLabelG = new JLabel("",imgG,JLabel.CENTER);
-                JLabel imageLabelD = new JLabel("",imgD,JLabel.CENTER);
+                imageLabelG.setIcon(imgG);
+                imageLabelD.setIcon(imgD);
                 imageDepPanel.add(imageLabelG,BorderLayout.CENTER);
                 imageResPanel.add(imageLabelD,BorderLayout.CENTER);               
                 this.validate();                            
@@ -315,24 +435,43 @@ public class AppWindow extends javax.swing.JFrame {
     */
     public void cleanVariables() {
         
-        imageDepPanel.removeAll();
-        imageResPanel.removeAll();
+        imageLabelG.setIcon(null);
+        imageLabelD.setIcon(null);
+        imageLabelG.repaint();
+        imageLabelD.repaint();
         fichierSource = null;
         imageDep = null;
         imageRes = null;
-        this.validate();
+        imageHauteur.setText("");
+        imageLargeur.setText("");
+        imageCouleurR.setText("");
+        imageCouleurG.setText("");
+        imageCouleurB.setText("");
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton BouttonAgrandir;
     private javax.swing.JRadioButton BouttonPalette;
     private javax.swing.JRadioButton BouttonROI;
+    private javax.swing.ButtonGroup GroupageBouttonOutils;
+    private javax.swing.JLabel LabelB;
+    private javax.swing.JLabel LabelG;
+    private javax.swing.JLabel LabelHauteur;
+    private javax.swing.JLabel LabelLargeur;
+    private javax.swing.JLabel LabelR;
     private javax.swing.JMenu aproposMenu;
     private javax.swing.JToolBar barreOutils;
     private javax.swing.JMenu editionMenu;
     private javax.swing.JMenuItem fermerImage;
     private javax.swing.JMenu fichierMenu;
+    private javax.swing.JTextField imageCouleurB;
+    private javax.swing.JTextField imageCouleurG;
+    private javax.swing.JTextField imageCouleurR;
     private javax.swing.JPanel imageDepPanel;
     private javax.swing.JScrollPane imageDepSP;
+    private javax.swing.JTextField imageHauteur;
+    private javax.swing.JLabel imageLabelD;
+    private javax.swing.JLabel imageLabelG;
+    private javax.swing.JTextField imageLargeur;
     private javax.swing.JPanel imageResPanel;
     private javax.swing.JScrollPane imageResSP;
     private javax.swing.JMenuBar menuPrincipal;
