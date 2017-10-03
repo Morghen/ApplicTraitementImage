@@ -359,18 +359,16 @@ public class AppWindow extends javax.swing.JFrame {
             {   
                 imageHauteur.setEditable(false);
                 imageLargeur.setEditable(false);
+                BouttonValider.setEnabled(true);
+                imageCouleurR.setEditable(true);
+                imageCouleurG.setEditable(true);
+                imageCouleurB.setEditable(true);
                 ColorBefore = null;
-                ColorBefore = new Color(imageDep.getRGB((int)evt.getX(),(int)evt.getY()));
+                ColorBefore = new Color(imageDep.getRGB(evt.getX(),evt.getY()));
                 imageCouleurR.setText(Integer.toString(ColorBefore.getRed()));
                 imageCouleurG.setText(Integer.toString(ColorBefore.getGreen()));
                 imageCouleurB.setText(Integer.toString(ColorBefore.getBlue()));
-                if(!BouttonValider.isEnabled())
-                {
-                    BouttonValider.setEnabled(true);
-                    imageCouleurR.setEditable(true);
-                    imageCouleurG.setEditable(true);
-                    imageCouleurB.setEditable(true);
-                }
+                
             }
             if(BouttonROI.isSelected() && imageDep != null)
             {          
@@ -565,7 +563,7 @@ public class AppWindow extends javax.swing.JFrame {
         BufferedImage tmp = new BufferedImage(x, y, imageDep.getType());
         Graphics g = tmp.getGraphics();
         g.fillRect(0, 0, x, y);
-        g.drawImage(imageDep, 0, 0, null);
+        g.drawImage(imageRes, 0, 0, null);
         g.dispose();
         imageRes = null;
         imageRes = tmp;
