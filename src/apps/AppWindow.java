@@ -145,6 +145,11 @@ public class AppWindow extends javax.swing.JFrame {
         BouttonAgrandir.setText("Taille");
         BouttonAgrandir.setFocusable(false);
         BouttonAgrandir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BouttonAgrandir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BouttonAgrandirActionPerformed(evt);
+            }
+        });
         barreOutils.add(BouttonAgrandir);
 
         LabelHauteur.setText("Hauteur");
@@ -352,6 +357,8 @@ public class AppWindow extends javax.swing.JFrame {
         {
             if(BouttonPalette.isSelected() && imageDep != null)
             {   
+                imageHauteur.setEditable(false);
+                imageLargeur.setEditable(false);
                 ColorBefore = null;
                 ColorBefore = new Color(imageDep.getRGB((int)evt.getX(),(int)evt.getY()));
                 imageCouleurR.setText(Integer.toString(ColorBefore.getRed()));
@@ -366,7 +373,12 @@ public class AppWindow extends javax.swing.JFrame {
                 }
             }
             if(BouttonROI.isSelected() && imageDep != null)
-            {              
+            {          
+                imageHauteur.setEditable(false);
+                imageLargeur.setEditable(false);
+                imageCouleurR.setEditable(false);
+                imageCouleurG.setEditable(false);
+                imageCouleurB.setEditable(false);
                 if(etatVar==1)
                 {
                     X1 = evt.getX();
@@ -380,13 +392,6 @@ public class AppWindow extends javax.swing.JFrame {
                     ROI(X1,Y1,X2,Y2);
                     etatVar=1;
                 }
-            }
-            if(BouttonAgrandir.isSelected() && imageDep != null)
-            {
-                imageHauteur.setEditable(true);
-                imageLargeur.setEditable(true);
-                BouttonValider.setEnabled(true);
-                this.validate();
             }
         }
         catch(Exception e)
@@ -424,6 +429,18 @@ public class AppWindow extends javax.swing.JFrame {
             creaImage(Integer.parseInt(imageLargeur.getText()),Integer.parseInt(imageHauteur.getText()));
         }
     }//GEN-LAST:event_BouttonValiderActionPerformed
+
+    private void BouttonAgrandirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BouttonAgrandirActionPerformed
+        if(BouttonAgrandir.isSelected() && imageDep != null)
+        {
+                imageCouleurR.setEditable(false);
+                imageCouleurG.setEditable(false);
+                imageCouleurB.setEditable(false);
+                imageHauteur.setEditable(true);
+                imageLargeur.setEditable(true);
+                BouttonValider.setEnabled(true);
+        }
+    }//GEN-LAST:event_BouttonAgrandirActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -533,6 +550,7 @@ public class AppWindow extends javax.swing.JFrame {
     
     private void ROI(int X1, int Y1, int X2, int Y2) {
         
+        
         for(int i =0; i < Math.abs(X2-X1); i++)
         {
             for(int j =0; j < Math.abs(Y2-Y1); j++)
@@ -549,9 +567,9 @@ public class AppWindow extends javax.swing.JFrame {
         g.fillRect(0, 0, x, y);
         g.drawImage(imageDep, 0, 0, null);
         g.dispose();
-        imageLabelD.setIcon(null);
         imageRes = null;
         imageRes = tmp;
+        imageLabelD.setIcon(null);
         imageLabelD.setIcon(new ImageIcon(imageRes));
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
