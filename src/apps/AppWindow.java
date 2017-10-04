@@ -480,7 +480,7 @@ public class AppWindow extends javax.swing.JFrame {
         
         JFileChooser openPic = new JFileChooser();  // Selection de fichier
         openPic.setAcceptAllFileFilterUsed(false);  // Cacher "Tous les fichier"
-        openPic.setFileFilter(new FileNameExtensionFilter("Images (gif,jpg,png)","gif","jpg","png"));   // Filtrer uniquement sur certaines extension
+        openPic.setFileFilter(new FileNameExtensionFilter("Images (gif,jpg,png,bmp)","gif","jpg","png","bmp"));   // Filtrer uniquement sur certaines extension
         if(lastDirectoryUsed != null)
             openPic.setCurrentDirectory(new File(lastDirectoryUsed));
         else
